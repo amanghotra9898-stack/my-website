@@ -38,13 +38,13 @@ window.SDX = {
       // https:// links only (e.g. a GitHub Releases asset URL or Google Play link).
       // While empty, every download button for this game stays hidden.
       downloads: {
-        android: "",   // direct APK link (GitHub Releases / Cloudflare R2) or Google Play
+        android: "https://github.com/amanghotra9898-stack/my-website/releases/download/medieval-life-v1.2.3/Game.apk",   // GitHub Releases asset (SHA-256 283d8828e8d5e80915289191c5d033e7a3c3317c7fcc7fef45c5258113a68a28)
         web: ""        // Playgama / browser-playable link
       },
       // Shown next to the DOWNLOAD GAME button — use the REAL values of the uploaded APK.
       apk: {
-        version: "",   // e.g. "0.9.3"
-        size: ""       // e.g. "180 MB"
+        version: "1.2.3",
+        size: "202 MB"
       },
 
       // Real in-game screenshots (full image + small thumbnail + description)

@@ -90,7 +90,14 @@
   function wireDownload(b) {
     var g = gameById(b.getAttribute("data-download"));
     var url = downloadUrl(g, b.getAttribute("data-platform") || "any");
-    if (url) { setExternal(b, url); b.hidden = false; }
+    if (url && /\.apk(?:[?#]|$)/i.test(url)) {
+      // Direct APK file: download in the same tab (no blank new tab, no extra page)
+      b.setAttribute("href", url);
+      b.removeAttribute("target");
+      b.setAttribute("rel", "noopener");
+      b.setAttribute("download", "Game.apk");
+      b.hidden = false;
+    } else if (url) { setExternal(b, url); b.hidden = false; }
     else { b.removeAttribute("href"); b.hidden = true; }
   }
   function wireDownloadWraps() {
