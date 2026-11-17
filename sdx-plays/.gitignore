@@ -1,0 +1,22 @@
+# Secrets — never commit these
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+credentials*.json
+secrets*
+
+# Build outputs / large binaries (host APKs on Play Store / GitHub Releases instead)
+*.apk
+*.aab
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
