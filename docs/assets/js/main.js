@@ -87,6 +87,33 @@
     var dl = (g && g.downloads) || {};
     return p === "any" ? (safeHttps(dl.android) || safeHttps(dl.web)) : safeHttps(dl[p]);
   }
+  /* ---------- Privacy-friendly analytics (first-party, no cookies) ----------
+     Sends tiny events to /api/track on this same site (Cloudflare Pages Functions).
+     Skipped where there is no backend (GitHub Pages, local files) and when the visitor
+     has "Do Not Track" / "Global Privacy Control" switched on. A click is recorded as a
+     download-button CLICK only — it does not mean the APK finished downloading. */
+  var TRACK = location.protocol === "https:" && !/\.github\.io$/i.test(location.hostname)
+    && navigator.doNotTrack !== "1" && navigator.globalPrivacyControl !== true;
+  function track(evt) {
+    if (!TRACK) return;
+    try {
+      evt.p = location.pathname;
+      var r = new Uint8Array(12); crypto.getRandomValues(r);
+      evt.i = Array.prototype.map.call(r, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+      var body = JSON.stringify(evt);
+      if (navigator.sendBeacon) navigator.sendBeacon("/api/track", new Blob([body], { type: "text/plain" }));
+      else fetch("/api/track", { method: "POST", body: body, keepalive: true, credentials: "same-origin" }).catch(function () {});
+    } catch (e) { /* analytics must never break the page */ }
+  }
+  function buttonPlace(b) {
+    if (b.closest(".ml-titlebar")) return "titlebar";
+    if (b.closest(".download-box")) return "sidebar";
+    if (b.closest(".game-card")) return /games(\.html)?$/.test(location.pathname) ? "card-games" : "card-home";
+    if (b.closest(".hero")) return "hero";
+    if (b.closest(".split")) return "screenshots";
+    return "other";
+  }
+
   function wireDownload(b) {
     var g = gameById(b.getAttribute("data-download"));
     var url = downloadUrl(g, b.getAttribute("data-platform") || "any");
@@ -97,6 +124,12 @@
       b.setAttribute("rel", "noopener");
       b.setAttribute("download", "Game.apk");
       b.hidden = false;
+      if (!b.hasAttribute("data-tracked")) {
+        b.setAttribute("data-tracked", "");
+        b.addEventListener("click", function () {
+          track({ t: "dl", g: b.getAttribute("data-download"), b: buttonPlace(b) });
+        });
+      }
     } else if (url) { setExternal(b, url); b.hidden = false; }
     else { b.removeAttribute("href"); b.hidden = true; }
   }
@@ -277,5 +310,6 @@
     requestAnimationFrame(function () { tt.classList.toggle("show", window.scrollY > 600); ticking = false; });
   }, { passive: true });
   document.querySelectorAll(".to-top, .js-top").forEach(function (b) { b.addEventListener("click", function () { window.scrollTo({ top: 0 }); }); });
+  track({ t: "pv", r: document.referrer || "" });
   var y = document.getElementById("year"); if (y) y.textContent = String(new Date().getFullYear());
 })();

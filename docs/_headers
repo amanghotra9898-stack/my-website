@@ -26,3 +26,10 @@ https://:version.sdx-plays.pages.dev/*
   Content-Type: application/vnd.android.package-archive
   Content-Disposition: attachment
   X-Robots-Tag: noindex
+
+# Private analytics dashboard: never indexed, never cached
+# (also enforced in functions/admin/_middleware.js, behind Cloudflare Access)
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+  Referrer-Policy: no-referrer

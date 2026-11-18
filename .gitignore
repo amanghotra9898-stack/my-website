@@ -1,0 +1,25 @@
+# Secrets — never commit
+.env
+.env.*
+.dev.vars
+*.pem
+*.key
+*.jks
+*.keystore
+credentials*.json
+
+# Local tooling
+node_modules/
+.wrangler/
+wrangler.toml
+
+# Large binaries (APKs live on GitHub Releases)
+*.apk
+*.aab
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
