@@ -105,6 +105,7 @@
       else fetch("/api/track", { method: "POST", body: body, keepalive: true, credentials: "same-origin" }).catch(function () {});
     } catch (e) { /* analytics must never break the page */ }
   }
+  var lastClick = {};
   function buttonPlace(b) {
     if (b.closest(".ml-titlebar")) return "titlebar";
     if (b.closest(".download-box")) return "sidebar";
@@ -127,7 +128,11 @@
       if (!b.hasAttribute("data-tracked")) {
         b.setAttribute("data-tracked", "");
         b.addEventListener("click", function () {
-          track({ t: "dl", g: b.getAttribute("data-download"), b: buttonPlace(b) });
+          // count a button at most once per 10 s from this page (double-clicks)
+          var place = buttonPlace(b), now = Date.now();
+          if (now - (lastClick[place] || 0) < 10000) return;
+          lastClick[place] = now;
+          track({ t: "dl", g: b.getAttribute("data-download"), b: place });
         });
       }
     } else if (url) { setExternal(b, url); b.hidden = false; }

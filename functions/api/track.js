@@ -75,26 +75,27 @@ export async function onRequestPost({ request, env }) {
   const visitor = (await hmacHex(env.HASH_SALT, `${ip}|${ua}|${day}`)).slice(0, 32);
   const src = (await hmacHex(env.HASH_SALT, `ip|${ip}|${day}`)).slice(0, 32);
 
-  // 4. Rate limit + de-duplication
+  // 4. Rate limit
   const db = env.DB;
   const recent = await db.prepare(
     "SELECT COUNT(*) AS ip, SUM(CASE WHEN visitor = ?1 THEN 1 ELSE 0 END) AS v FROM events WHERE src = ?2 AND ts > ?3"
   ).bind(visitor, src, now - 3600000).first();
   if (recent && (recent.v >= MAX_EVENTS_PER_HOUR || recent.ip >= MAX_EVENTS_PER_IP_HOUR)) return empty(429);
 
-  const dup = type === "pageview"
-    ? await db.prepare("SELECT 1 FROM events WHERE visitor = ?1 AND type = 'pageview' AND path = ?2 AND ts > ?3 LIMIT 1")
-        .bind(visitor, path, now - PAGEVIEW_DEDUPE_MS).first()
-    : await db.prepare("SELECT 1 FROM events WHERE visitor = ?1 AND type = 'download_click' AND button = ?2 AND ts > ?3 LIMIT 1")
-        .bind(visitor, button, now - CLICK_DEDUPE_MS).first();
-  if (dup) return empty();
-
-  // 5. Store
+  // 5. Store — duplicate check and insert are ONE atomic statement, so two
+  //    simultaneous requests (e.g. a double-click) cannot both be counted.
   const cf = request.cf || {};
+  const since = now - (type === "pageview" ? PAGEVIEW_DEDUPE_MS : CLICK_DEDUPE_MS);
   await db.prepare(
-    "INSERT OR IGNORE INTO events (eid, ts, day, type, path, game, button, visitor, src, device, country, referrer) VALUES (?12,?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11)"
-  ).bind(now, day, type, path, game, button, visitor, src, deviceFromUA(ua),
-         typeof cf.country === "string" ? cf.country.slice(0, 2) : null, referrer, eid).run();
+    `INSERT OR IGNORE INTO events (eid, ts, day, type, path, game, button, visitor, src, device, country, referrer)
+     SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12
+     WHERE NOT EXISTS (
+       SELECT 1 FROM events
+       WHERE visitor = ?8 AND type = ?4 AND ts > ?13
+         AND ((?4 = 'pageview' AND path = ?5) OR (?4 = 'download_click' AND button = ?7))
+     )`
+  ).bind(eid, now, day, type, path, game, button, visitor, src, deviceFromUA(ua),
+         typeof cf.country === "string" ? cf.country.slice(0, 2) : null, referrer, since).run();
 
   return empty();
 }
