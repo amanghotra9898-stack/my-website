@@ -1,5 +1,5 @@
 // GET /api/admin/stats?days=30 — aggregated analytics for the private dashboard.
-// Protected by ./_middleware.js (Cloudflare Access + email allow-list).
+// Protected by ./_middleware.js (admin session cookie).
 
 import { json, istDay, istDayOffset } from "../../_lib/util.js";
 
@@ -86,7 +86,7 @@ export async function onRequestGet({ request, env, data }) {
   return json({
     generatedAt: new Date().toISOString(),
     timezone: "Asia/Kolkata",
-    admin: data.adminEmail,
+    admin: data.adminUser,
     days,
     summary,
     series,

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin sign in — SDX PLAYS</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#060b1a">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body class="admin admin-login">
+<main id="main" class="login-wrap">
+  <form class="login-card" id="login" novalidate autocomplete="on">
+    <a class="brand" href="/" aria-label="SDX PLAYS website"><img src="/assets/img/logo.webp" alt="SDX PLAYS" width="600" height="311"></a>
+    <h1>Admin sign in</h1>
+    <p class="login-note">Private analytics. Authorised admin only.</p>
+
+    <label for="u">Username</label>
+    <input id="u" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required maxlength="64">
+
+    <label for="p">Password</label>
+    <input id="p" name="password" type="password" autocomplete="current-password" required maxlength="256">
+
+    <div id="totp-row">
+      <label for="c">6-digit code from your authenticator app</label>
+      <input id="c" name="one-time-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6">
+    </div>
+    <div id="rec-row" hidden>
+      <label for="r">Recovery code</label>
+      <input id="r" name="recovery" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" placeholder="XXXX-XXXX-XXXX-XXXX">
+    </div>
+    <button type="button" class="linkish" id="switch">Use a recovery code instead</button>
+
+    <button type="submit" class="btn btn-primary" id="go">Sign in</button>
+    <p class="status" id="msg" role="status" aria-live="polite"></p>
+  </form>
+</main>
+<script type="module" src="/admin/login.js"></script>
+</body>
+</html>

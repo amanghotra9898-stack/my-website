@@ -1,5 +1,5 @@
 /* SDX PLAYS — private analytics dashboard.
-   Data comes only from /api/admin/stats (same origin, protected by Cloudflare Access).
+   Data comes only from /api/admin/stats (same origin, protected by the admin session cookie).
    Everything is rendered with textContent / createElement — no innerHTML with data. */
 (function () {
   "use strict";
@@ -130,7 +130,8 @@
     status("Loading analytics…");
     fetch("/api/admin/stats?days=" + days, { credentials: "same-origin", cache: "no-store", headers: { Accept: "application/json" } })
       .then(function (r) {
-        if (r.status === 403 || r.status === 401) throw new Error("Access denied — please sign in again.");
+        if (r.status === 401) { location.replace("/admin/login"); throw new Error("Session ended — redirecting to sign in…"); }
+        if (r.status === 403) throw new Error("Access denied — please sign in again.");
         if (!r.ok) throw new Error("Could not load analytics (HTTP " + r.status + ").");
         return r.json();
       })
@@ -147,5 +148,25 @@
   });
   $("refresh").addEventListener("click", load);
   var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { if (lastData) trend(lastData.series || []); }, 200); });
+  // Session: fetch the per-session CSRF token used for sign-out.
+  var csrf = null;
+  fetch("/api/auth/session", { credentials: "same-origin", cache: "no-store" })
+    .then(function (r) { if (r.status === 401) { location.replace("/admin/login"); return null; } return r.ok ? r.json() : null; })
+    .then(function (s) {
+      if (!s) return;
+      csrf = s.csrf;
+      // Separate element: never overwritten by the analytics status line.
+      if (typeof s.recoveryRemaining === "number" && s.recoveryRemaining < 3) {
+        $("rec-warn").textContent = "Warning: only " + s.recoveryRemaining + " recovery code" + (s.recoveryRemaining === 1 ? "" : "s") + " left. Create new ones with the setup tool (\u201cNew recovery codes only\u201d).";
+        $("rec-warn").hidden = false;
+      }
+    }).catch(function () {});
+  function signOut(all) {
+    if (!csrf) { location.replace("/admin/login"); return; }
+    fetch(all ? "/api/auth/logout-all" : "/api/auth/logout", { method: "POST", credentials: "same-origin", cache: "no-store", headers: { "X-CSRF-Token": csrf } })
+      .finally(function () { csrf = null; location.replace("/admin/login"); });
+  }
+  $("logout").addEventListener("click", function () { signOut(false); });
+  $("logout-all").addEventListener("click", function () { signOut(true); });
   load();
 })();

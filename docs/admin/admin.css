@@ -15,6 +15,7 @@ body.admin{padding-bottom:40px}
 .range .refresh{font-size:1.1rem;padding:0 12px}
 .status{color:var(--text-mute);font-size:.9rem;margin:6px 0 18px;min-height:1.4em}
 .status.error{color:#ff8a8a}
+.rec-warn{margin:8px 0 4px;padding:10px 14px;border-radius:var(--radius-sm);background:rgba(255,138,138,.08);border:1px solid rgba(255,138,138,.45);color:#ffb4b4;font-size:.9rem}
 .admin-section{margin-bottom:20px}
 .panel h2{font-size:1.25rem;margin:0 0 14px}
 .panel-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
@@ -84,3 +85,22 @@ body.admin{padding-bottom:40px}
   .range .refresh{flex:0 0 auto}
 }
 .admin-user .btn{white-space:nowrap;padding:0 14px;min-height:38px;font-size:.85rem}
+
+/* Sign-in page */
+body.admin-login{padding:0;min-height:100vh;min-height:100dvh;display:grid;place-items:center}
+.login-wrap{width:100%;padding:24px 16px}
+.login-card{max-width:400px;margin:0 auto;padding:28px 26px;border-radius:var(--radius);background:linear-gradient(180deg,rgba(16,29,58,.92),rgba(10,19,40,.92));border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.45);display:flex;flex-direction:column}
+.login-card .brand{position:static;transform:none;align-self:center;margin:0 0 12px;padding:0;border:0}
+.login-card .brand img{height:56px;width:auto}
+.login-card h1{font-size:1.7rem;margin:0;text-align:center}
+.login-note{color:var(--text-mute);font-size:.88rem;text-align:center;margin:4px 0 18px}
+.login-card label{display:block;font-size:.85rem;font-weight:600;color:var(--text-dim);margin:12px 0 6px}
+.login-card input{width:100%;min-height:46px;padding:0 14px;border-radius:var(--radius-sm);border:1px solid var(--line-strong);background:var(--navy-900);color:var(--text);font:500 1rem var(--font-body)}
+.login-card input:focus-visible{outline:2px solid var(--blue-400);outline-offset:1px;border-color:transparent}
+.login-card #c{letter-spacing:.3em;font-variant-numeric:tabular-nums}
+.login-card .linkish{align-self:flex-start;margin:10px 0 4px;padding:6px 0;border:0;background:none;color:var(--blue-300);font:500 .85rem var(--font-body);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.login-card .btn{margin-top:16px;width:100%;justify-content:center}
+.login-card .btn:disabled{opacity:.6;cursor:progress}
+.login-card .status{margin:12px 0 0;text-align:center}
+[hidden]{display:none!important}
+.admin-security{margin-top:8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;color:var(--text-mute);font-size:.88rem}

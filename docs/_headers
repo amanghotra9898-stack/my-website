@@ -28,7 +28,7 @@ https://:version.sdx-plays.pages.dev/*
   X-Robots-Tag: noindex
 
 # Private analytics dashboard: never indexed, never cached
-# (also enforced in functions/admin/_middleware.js, behind Cloudflare Access)
+# (also enforced in functions/admin/_middleware.js, which requires a valid admin session)
 /admin/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store

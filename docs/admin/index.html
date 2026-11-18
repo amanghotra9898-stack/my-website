@@ -21,7 +21,7 @@
     <div class="admin-title"><span class="eyebrow">Private</span><strong>Analytics</strong></div>
     <div class="admin-user">
       <span class="who" id="who" title="Signed-in admin"></span>
-      <a class="btn btn-ghost btn-sm" href="/cdn-cgi/access/logout">Sign out</a>
+      <button type="button" class="btn btn-ghost btn-sm" id="logout">Sign out</button>
     </div>
   </div>
 </header>
@@ -37,6 +37,7 @@
     </div>
   </div>
 
+  <p class="rec-warn" id="rec-warn" role="alert" hidden></p>
   <p class="status" id="status" role="status">Loading analytics…</p>
 
   <section aria-labelledby="sum-h" class="admin-section">
@@ -90,6 +91,10 @@
 
   <p class="note foot">“Download clicks” count clicks on the Medieval Life download buttons. A click does <strong>not</strong> confirm that the APK finished downloading or was installed.
   “Visitors” are counted once per day per device (no cookies, no stored IP addresses), so multi-day totals add up daily visitors.</p>
+  <section class="panel admin-section admin-security" aria-label="Session security">
+    <span>Lost a device or signed in somewhere you shouldn't have? End every admin session.</span>
+    <button type="button" class="btn btn-ghost btn-sm" id="logout-all">Sign out everywhere</button>
+  </section>
 </main>
 <script src="/admin/admin.js"></script>
 </body>

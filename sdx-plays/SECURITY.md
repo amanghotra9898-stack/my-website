@@ -6,7 +6,7 @@ No website can be made 100% unhackable. For a static site like this one, the mai
 (2) **malicious script injection** through the page code, and (3) the site being **framed or impersonated**.
 The code fixes below handle (2) and (3). Only **you** can handle (1), by securing your accounts (Part C).
 
-There is no admin panel, login or database on this site, so there is nothing to "log into" and nothing to steal from it.
+The public site has no user accounts. The only login is the private analytics admin (`/admin/`, custom sign-in with password + authenticator code — see `ANALYTICS-SETUP.md`); the analytics database stores no names, emails or raw IP addresses.
 No fake security features were added.
 
 ## Part A — Audit results
@@ -39,7 +39,6 @@ No fake security features were added.
 - WAF, Bot Fight Mode, SSL mode etc. are **zone** settings: they need a domain added to Cloudflare. They do **not** apply to a `pages.dev` address, so don't look for them yet.
 - Workers & Pages → your project → **Settings**:
   - *Builds & deployments → Preview deployments*: set to **None** (or only specific branches) if you don't want every branch to get a public preview URL.
-  - *Access policy* (optional, free for small teams): protect **preview** deployments with Cloudflare Access so only you can open them.
 
 **Later, if you connect your own domain** (add the domain to Cloudflare, then Pages project → Custom domains), open that domain in the dashboard:
 1. **SSL/TLS → Overview**: encryption mode **Full (strict)**.
