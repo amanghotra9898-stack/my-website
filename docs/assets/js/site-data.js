@@ -53,6 +53,31 @@ window.SDX = {
         { src: "assets/img/games/medieval-life/screenshot-2-night.webp",   thumb: "assets/img/games/medieval-life/screenshot-2-night-thumb.webp",   alt: "The village at night under a starry sky, lit by lanterns" },
         { src: "assets/img/games/medieval-life/screenshot-3-build.webp",   thumb: "assets/img/games/medieval-life/screenshot-3-build-thumb.webp",   alt: "Placing a wooden house blueprint in first person with the hammer" }
       ]
+    },
+    {
+      id: "mito-box",
+      title: "Mito Box",
+      page: "mito-box.html",
+      cover: "assets/img/games/mito-box/cover-960.webp",   // key art from the game's main menu (contains the game logo)
+      short: "A colourful creature-collecting adventure: catch and befriend creatures from Indian mythology, ride Garuda, build your own base and play co-op with a friend.",
+      tags: ["Adventure", "Creature Collecting", "Co-op"],
+
+      downloads: {
+        android: "https://github.com/amanghotra9898-stack/my-website/releases/download/mito-box-v1.1.0/MitoBox.apk",   // GitHub Releases asset (SHA-256 b544f2a91917f4f5313e215df7815efd4620ec9964498348be7903a52ae2d727)
+        web: ""
+      },
+      apk: {
+        version: "1.1.0",
+        size: "118 MB"
+      },
+
+      // Screens from the Android version (menu, character select, loading-screen artwork)
+      screenshots: [
+        { src: "assets/img/games/mito-box/screen-1-main-menu.webp",        thumb: "assets/img/games/mito-box/screen-1-main-menu-thumb.webp",        alt: "Mito Box main menu: a trainer and his creatures overlooking the island" },
+        { src: "assets/img/games/mito-box/screen-2-character-select.webp", thumb: "assets/img/games/mito-box/screen-2-character-select-thumb.webp", alt: "Choose your character: Trainer Boy, Trainer Girl, Researcher or Rival" },
+        { src: "assets/img/games/mito-box/screen-3-base-building.webp",    thumb: "assets/img/games/mito-box/screen-3-base-building-thumb.webp",    alt: "Loading-screen art: building a wooden base with creature companions" },
+        { src: "assets/img/games/mito-box/screen-4-temple-battle.webp",    thumb: "assets/img/games/mito-box/screen-4-temple-battle-thumb.webp",    alt: "Loading-screen art: battling a giant serpent at an ancient temple" }
+      ]
     }
   ]
 };
